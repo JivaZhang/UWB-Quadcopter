@@ -123,7 +123,7 @@ all: directories
 	echo "...Compiling..."
 	${CC} ${COMPILE_FLAGS} ${FILES}
 	echo "...Linking..."
-	${LD} ${LINKER_FLAGS} ${OBJS}
+	${LD} ${OBJS} ${LINKER_FLAGS}
 	echo "...Copying Objects..."
 	${OB} ${OBJCOPY_FLAGS} a.out ${NAME}.bin
 
