@@ -16,7 +16,7 @@
 #define PWM_PERIOD_us		20000	// 20  ms
 #define PULSE_TIME_RES_Hz	1000000	// 1000000 Hz = 1 us / cycle
 
-#define MAX_VALUE			700
+#define MAX_VALUE			1625
 
 // Enums and Structs
 enum Motors {

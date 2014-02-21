@@ -52,6 +52,8 @@ void setup() {
 	SysCtlClockSet(SYSCTL_SYSDIV_5|SYSCTL_USE_PLL|SYSCTL_OSC_MAIN|SYSCTL_XTAL_16MHZ);
 	quad_motors_init();
 	quad_buttons_init();
+	
+	
 }
 
 void loop() {
@@ -62,6 +64,7 @@ void loop() {
 
 int main() {
 	setup();
+	//GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 14);
 	while(1) {
 		loop();
 	}

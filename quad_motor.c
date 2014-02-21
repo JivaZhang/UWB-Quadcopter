@@ -14,14 +14,17 @@ void quad_motors_init() {
 	SysCtlPWMClockSet(SYSCTL_PWMDIV_32);
 	pwm_clock_freq_hz = SysCtlClockGet() / 32;
 	
+	
 	// Enable the peripheral devices / ports
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM1);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF); // for the RGB LED
 	
 	// Set the pins on the aformentioned ports
 	GPIOPinTypePWM(GPIO_PORTD_BASE, GPIO_PIN_0 | GPIO_PIN_1);
 	GPIOPinTypePWM(GPIO_PORTA_BASE, GPIO_PIN_6 | GPIO_PIN_7);
+	GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3); // for the RGB LED
 	
 	GPIOPinConfigure(GPIO_PD0_M1PWM0);
 	GPIOPinConfigure(GPIO_PD1_M1PWM1);
@@ -29,7 +32,6 @@ void quad_motors_init() {
 	GPIOPinConfigure(GPIO_PA7_M1PWM3);
 	
 	// Set the PWM Generators and periods, and calculate numbers of ticks
-	
 	period_num_ticks = (pwm_clock_freq_hz * PWM_PERIOD_us) / PULSE_TIME_RES_Hz;
 	min_pulse_ticks = (pwm_clock_freq_hz * MIN_PULSE_WIDTH_us) / PULSE_TIME_RES_Hz;
 	max_pulse_ticks = (pwm_clock_freq_hz * MAX_PULSE_WIDTH_us) / PULSE_TIME_RES_Hz;
@@ -54,6 +56,16 @@ void quad_motors_init() {
 	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_1, min_pulse_ticks); // motor 2
 	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_2, min_pulse_ticks); // motor 3
 	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, min_pulse_ticks); // motor 4
+	
+	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, ); // motor 1
+	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_1, ); // motor 2
+	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_2, ); // motor 3
+	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, ); // motor 4
+	
+	if (pwm_clock_freq_hz == 1250000) {
+		GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, 2);
+	}
+	GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 4);
 }
 
 

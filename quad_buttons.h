@@ -18,9 +18,11 @@ enum Buttons {
 volatile bool button_pressed_right;
 volatile bool button_pressed_left;
 volatile bool button_pressed_e_stop;
+volatile bool button_pressed_left_and_right;
 
 volatile bool button_released_right;
 volatile bool button_released_left;
+volatile bool button_released_left_and_right;
 volatile bool button_released_e_stop;
 
 
