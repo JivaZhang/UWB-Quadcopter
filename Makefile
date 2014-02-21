@@ -56,12 +56,18 @@ DIRS       = driverlib \
              lm4flash
 
 # All of the source files for the project should be listed here (not headers)
-FILES      = startup_gcc.c \
+FILES      = startup_gcc.c  \
+			 quad_motor.c  \
+			 quad_buttons.c \
+			 quad_9_axis.c  \
              quad-main.c
 
 # Every listing in FILES above should have a corresponding '.o' entry here.  
 # There are "better" ways to do this, but this was the simplist.
-OBJS       = startup_gcc.o \
+OBJS       = startup_gcc.o  \
+			 quad_motor.o  \
+			 quad_buttons.o \
+			 quad_9_axis.o  \
              quad-main.o
 
 # NAME is the name of the project which is assumed to be the basename of the 
@@ -123,7 +129,7 @@ all: directories
 	echo "...Compiling..."
 	${CC} ${COMPILE_FLAGS} ${FILES}
 	echo "...Linking..."
-	${LD} ${LINKER_FLAGS} ${OBJS}
+	${LD} ${OBJS} ${LINKER_FLAGS}
 	echo "...Copying Objects..."
 	${OB} ${OBJCOPY_FLAGS} a.out ${NAME}.bin
 
