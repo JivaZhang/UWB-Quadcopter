@@ -5,67 +5,21 @@
 // Initializes the PWM's for the motors, sets the upper and lower bounds, and 
 // starts a default PWM signal.
 void quad_motors_init() {
-	// Motor 1: Port D Pin 0 (PD0)
-	// Motor 2: Port D Pin 1 (PD1)
-	// Motor 3: Port A Pin 6 (PA6)
-	// Motor 4: Port A Pin 7 (PA7)
 
-	// Set the clock for the PWM
-	SysCtlPWMClockSet(SYSCTL_PWMDIV_32);
-	pwm_clock_freq_hz = SysCtlClockGet() / 32;
+	motor_min_pulse_ticks = (pwm1_clock_freq_hz * MIN_PULSE_WIDTH_us) / 
+							(PULSE_TIME_RES_Hz);
+				 	  
+	motor_max_pulse_ticks = (pwm1_clock_freq_hz * MAX_PULSE_WIDTH_us) / 
+							(PULSE_TIME_RES_Hz);
 	
-	
-	// Enable the peripheral devices / ports
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM1);
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF); // for the RGB LED
-	
-	// Set the pins on the aformentioned ports
-	GPIOPinTypePWM(GPIO_PORTD_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-	GPIOPinTypePWM(GPIO_PORTA_BASE, GPIO_PIN_6 | GPIO_PIN_7);
-	GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3); // for the RGB LED
-	
-	GPIOPinConfigure(GPIO_PD0_M1PWM0);
-	GPIOPinConfigure(GPIO_PD1_M1PWM1);
-	GPIOPinConfigure(GPIO_PA6_M1PWM2);
-	GPIOPinConfigure(GPIO_PA7_M1PWM3);
-	
-	// Set the PWM Generators and periods, and calculate numbers of ticks
-	period_num_ticks = (pwm_clock_freq_hz * PWM_PERIOD_us) / PULSE_TIME_RES_Hz;
-	min_pulse_ticks = (pwm_clock_freq_hz * MIN_PULSE_WIDTH_us) / PULSE_TIME_RES_Hz;
-	max_pulse_ticks = (pwm_clock_freq_hz * MAX_PULSE_WIDTH_us) / PULSE_TIME_RES_Hz;
-	
-	PWMGenConfigure(PWM1_BASE, PWM_GEN_0, PWM_GEN_MODE_DOWN);
-	PWMGenConfigure(PWM1_BASE, PWM_GEN_1, PWM_GEN_MODE_DOWN);
-	
-	PWMGenPeriodSet(PWM1_BASE, PWM_GEN_0, period_num_ticks);
-	PWMGenPeriodSet(PWM1_BASE, PWM_GEN_1, period_num_ticks);
-	
-	// Enable PWM output
-	PWMOutputState(PWM1_BASE, PWM_OUT_0_BIT, true); // motor 1
-	PWMOutputState(PWM1_BASE, PWM_OUT_1_BIT, true); // motor 2
-	PWMOutputState(PWM1_BASE, PWM_OUT_2_BIT, true); // motor 3
-	PWMOutputState(PWM1_BASE, PWM_OUT_3_BIT, true); // motor 4
-	
-	PWMGenEnable(PWM1_BASE, PWM_GEN_0);
-	PWMGenEnable(PWM1_BASE, PWM_GEN_1);
 	
 	// Set the initial pulse widths to be the minimum pulse width.
-	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, min_pulse_ticks); // motor 1
-	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_1, min_pulse_ticks); // motor 2
-	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_2, min_pulse_ticks); // motor 3
-	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, min_pulse_ticks); // motor 4
+	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, (motor_max_pulse_ticks + motor_min_pulse_ticks)/2); // motor 1
+	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_1, (motor_max_pulse_ticks + motor_min_pulse_ticks)/2); // motor 2
+	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_2, (motor_max_pulse_ticks + motor_min_pulse_ticks)/2); // motor 3
+	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, (motor_max_pulse_ticks + motor_min_pulse_ticks)/2); // motor 4
 	
-	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, ); // motor 1
-	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_1, ); // motor 2
-	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_2, ); // motor 3
-	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, ); // motor 4
-	
-	if (pwm_clock_freq_hz == 1250000) {
-		GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, 2);
-	}
-	GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 4);
+	//quad_rgb_led_set_color(GREEN);
 }
 
 
@@ -90,28 +44,28 @@ void quad_motors_set_value(int motor, int value) {
 	// Cap our values.
 	if (value < 0) {
 		value = 0;
-	} else if (value >= MAX_VALUE) {
-		value = MAX_VALUE;
+	} else if (value >= MAX_MOTOR_VALUE) {
+		value = MAX_MOTOR_VALUE;
 	}
 
-	uint32_t set_ticks = calculate_num_ticks(value);
+	uint32_t set_ticks = quad_motors_calculate_num_ticks(value);
 
 	switch(motor) {
 		case MOTOR_1:
 			PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, set_ticks); // motor 1
-			prev_val_motor_1 = value;
+			motor_1.prev_val = value;
 			break;
 		case MOTOR_2:
 			PWMPulseWidthSet(PWM1_BASE, PWM_OUT_1, set_ticks); // motor 2
-			prev_val_motor_2 = value;
+			motor_2.prev_val = value;
 			break;
 		case MOTOR_3:
 			PWMPulseWidthSet(PWM1_BASE, PWM_OUT_2, set_ticks); // motor 3
-			prev_val_motor_3 = value;
+			motor_3.prev_val = value;
 			break;
 		case MOTOR_4:
 			PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, set_ticks); // motor 4
-			prev_val_motor_4 = value;
+			motor_4.prev_val = value;
 			break;
 	}
 }
@@ -121,44 +75,44 @@ void quad_motors_set_value(int motor, int value) {
 int quad_motors_get_last_val(int motor) {
 	switch(motor) {
 		case MOTOR_1:
-			return prev_val_motor_1;
+			return motor_1.prev_val;
 			break;
 		case MOTOR_2:
-			return prev_val_motor_2;
+			return motor_2.prev_val;
 			break;
 		case MOTOR_3:
-			return prev_val_motor_3;
+			return motor_3.prev_val;
 			break;
 		case MOTOR_4:
-			return prev_val_motor_4;
+			return motor_4.prev_val;
 			break;
 	}
 }
 
 
-// calculate_num_ticks() calculates the desired pulse width in ticks based on
-// the value provided, the MAX_VALUE, and the min_pulse_ticks and
-// max_pulse_ticks values.
+// quad_motors_calculate_num_ticks() calculates the desired pulse width in ticks based on
+// the value provided, the MAX_MOTOR_VALUE, and the motor_min_pulse_ticks and
+// motor_max_pulse_ticks values.
 // 
 // The routine does use a rudimentary form of rounding. Note that this rounding
-// is still not perfect as it will be off if MAX_VALUE is an odd number.  This
-// is easily mitigated by setting MAX_VALUE to be an even number.
-uint32_t calculate_num_ticks(uint32_t value) {
+// is still not perfect as it will be off if MAX_MOTOR_VALUE is an odd number.  This
+// is easily mitigated by setting MAX_MOTOR_VALUE to be an even number.
+uint32_t quad_motors_calculate_num_ticks(uint32_t value) {
 	// We are assuming that value has already been truncated to be in the range
-	// [0, MAX_VALUE].  Bad things could happen otherwise!
+	// [0, MAX_MOTOR_VALUE].  Bad things could happen otherwise!
 	
 	uint32_t return_ticks;
 	uint32_t div_remaining;
-	uint32_t pulse_range_ticks = max_pulse_ticks - min_pulse_ticks;
+	uint32_t pulse_range_ticks = motor_max_pulse_ticks - motor_min_pulse_ticks;
 	
-	return_ticks = (pulse_range_ticks * value) / MAX_VALUE;
-	div_remaining = (pulse_range_ticks * value) % MAX_VALUE;
+	return_ticks = (pulse_range_ticks * value) / MAX_MOTOR_VALUE;
+	div_remaining = (pulse_range_ticks * value) % MAX_MOTOR_VALUE;
 	
-	if (div_remaining >= MAX_VALUE / 2) {
+	if (div_remaining >= MAX_MOTOR_VALUE / 2) {
 		return_ticks++;
 	}
 	
-	return_ticks += min_pulse_ticks;
+	return_ticks += motor_min_pulse_ticks;
 	return return_ticks;
 }
 

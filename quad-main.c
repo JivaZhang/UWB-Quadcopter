@@ -1,9 +1,11 @@
 
 
 #include "quad_common.h"
+#include "quad_pwm.h"
 #include "quad_buttons.h"
 #include "quad_motor.h"
 #include "quad_9_axis.h"
+#include "quad_rgb_led.h"
 
 // Motor Driver~
 	// set_max_duty()
@@ -50,9 +52,10 @@ struct PWMSettings {
 void setup() {
 	// We need to set the clock before anything else!
 	SysCtlClockSet(SYSCTL_SYSDIV_5|SYSCTL_USE_PLL|SYSCTL_OSC_MAIN|SYSCTL_XTAL_16MHZ);
+	quad_pwm_init();
 	quad_motors_init();
 	quad_buttons_init();
-	
+	quad_rgb_led_init();
 	
 }
 
@@ -64,7 +67,10 @@ void loop() {
 
 int main() {
 	setup();
-	//GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 14);
+	
+	quad_rgb_led_set_color(GREEN); // Green light indicates that we have
+								   // successfully finished initializing the 
+								   // quadcopter.
 	while(1) {
 		loop();
 	}

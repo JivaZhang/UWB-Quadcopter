@@ -53,21 +53,26 @@ DIRS       = driverlib \
              sensorlib \
              usblib    \
              examples  \
-             lm4flash
+             lm4flash  \
+             lmicdiusb
 
 # All of the source files for the project should be listed here (not headers)
 FILES      = startup_gcc.c  \
-			 quad_motor.c  \
+			 quad_motor.c  	\
 			 quad_buttons.c \
 			 quad_9_axis.c  \
+			 quad_rgb_led.c \
+			 quad_pwm.c     \
              quad-main.c
 
 # Every listing in FILES above should have a corresponding '.o' entry here.  
 # There are "better" ways to do this, but this was the simplist.
 OBJS       = startup_gcc.o  \
-			 quad_motor.o  \
+			 quad_motor.o   \
 			 quad_buttons.o \
 			 quad_9_axis.o  \
+			 quad_rgb_led.o \
+			 quad_pwm.o     \
              quad-main.o
 
 # NAME is the name of the project which is assumed to be the basename of the 
@@ -109,7 +114,7 @@ OB = arm-none-eabi-objcopy
 # Flags (Hope they all work :P)
 ################################################################################
 
-COMPILE_FLAGS = -g -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=softfp\
+COMPILE_FLAGS = -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=softfp\
                 -Os -ffunction-sections -fdata-sections -MD -std=c99 -Wall     \
                 -pedantic -DPART_TM4C123GH6PM -c -I${CURDIR}                   \
                 -DTARGET_IS_BLIZZARD_RA1
@@ -119,6 +124,7 @@ LINKER_FLAGS  = -T project.ld --entry ResetISR --gc-sections -L${LIB_DIRS}     \
 
 OBJCOPY_FLAGS = -O binary
 
+DEBUG_FLAGS   = -g -DDEBUG_MOTOR -DDEBUG_9_AXIS
 
 
 ################################################################################
@@ -127,7 +133,7 @@ OBJCOPY_FLAGS = -O binary
 
 all: directories
 	echo "...Compiling..."
-	${CC} ${COMPILE_FLAGS} ${FILES}
+	${CC} ${COMPILE_FLAGS} ${DEBUG_FLAGS} ${FILES}
 	echo "...Linking..."
 	${LD} ${OBJS} ${LINKER_FLAGS}
 	echo "...Copying Objects..."
