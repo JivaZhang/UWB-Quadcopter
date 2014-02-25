@@ -66,6 +66,18 @@ void setup() {
 	
 }
 
+void debugSetup(){ // uses the uart0 on gpio pins A0, and A1
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+
+    GPIOPinConfigure(GPIO_PA0_U0RX);
+    GPIOPinConfigure(GPIO_PA1_U0TX);
+    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+    UARTConfigSetExpClk(UART0_BASE, SysCtlClockGet(), 115200,
+        (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
+}
+
 void loop() {
 	int button_events = quad_buttons_get_button_events();
 	quad_buttons_handle_button_events(button_events);
@@ -74,12 +86,13 @@ void loop() {
 
 int main() {
 	setup();
-	
+	//debugSetup(); // the debug setup
 	quad_rgb_led_set_color(GREEN); // Green light indicates that we have
 								   // successfully finished initializing the 
 								   // quadcopter.
 	while(1) {
 		loop();
+		//if (UARTCharsAvail(UART0_BASE)) UARTCharPut(UART0_BASE, UARTCharGet(UART0_BASE)); // this will check for incoming data and retransmit
 	}
 
 }
