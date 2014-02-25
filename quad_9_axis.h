@@ -4,6 +4,7 @@
 #define QUAD_9_AXIS_H
 
 #include "quad_common.h"
+#include "quad_rgb_led.h"
 #include "inc/hw_i2c.h"
 #include "driverlib/i2c.h"
 #include "driverlib/uart.h"
@@ -15,8 +16,42 @@
 #define GYRO_MIN_VAL	-500	// (degrees / sec)
 #define GYRO_MAX_VAL	 500	
 
-#define FS_SEL_1				// For setting the range of the Gyroscope
-#define AFS_SEL_1				// For setting the range of the Accelerometer
+// Slave Address
+#define SLAVE_ADDR_9_AXIS	0x68
+
+// Slave Registers:
+// Gyroscope:
+#define GYRO_CONFIG		0x1B
+#define GYRO_XOUT_H		0x43
+#define GYRO_XOUT_L		0x44
+#define GYRO_YOUT_H		0x45
+#define GYRO_YOUT_L		0x46
+#define GYRO_ZOUT_H		0x47
+#define GYRO_ZOUT_L		0x48
+
+// Accelerometer:
+#define ACCEL_CONFIG	0x1C
+#define ACCEL_XOUT_H	0x3B
+#define ACCEL_XOUT_L	0x3C
+#define ACCEL_YOUT_H	0x3D
+#define ACCEL_YOUT_L	0x3E
+#define ACCEL_ZOUT_H	0x3F
+#define ACCEL_ZOUT_L	0x40
+
+// Magnetometer:
+#define MAGENTO_XOUT_H	0x03
+#define MAGENTO_XOUT_L	0x04
+#define MAGENTO_YOUT_H	0x05
+#define MAGENTO_YOUT_L	0x06
+#define MAGENTO_ZOUT_H	0x07
+#define MAGENTO_ZOUT_L	0x08
+
+
+#define FS_SEL 1				// For setting the range of the Gyroscope
+#define AFS_SEL 1				// For setting the range of the Accelerometer
+
+
+// Some structure to hold the calibration floats....
 
 typedef struct NineAxisRawReadings {
 	int16_t gyro_x;

@@ -14,10 +14,10 @@ void quad_motors_init() {
 	
 	
 	// Set the initial pulse widths to be the minimum pulse width.
-	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, (motor_max_pulse_ticks + motor_min_pulse_ticks)/2); // motor 1
-	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_1, (motor_max_pulse_ticks + motor_min_pulse_ticks)/2); // motor 2
-	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_2, (motor_max_pulse_ticks + motor_min_pulse_ticks)/2); // motor 3
-	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, (motor_max_pulse_ticks + motor_min_pulse_ticks)/2); // motor 4
+	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, motor_min_pulse_ticks); // motor 1
+	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_1, motor_min_pulse_ticks); // motor 2
+	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_2, motor_min_pulse_ticks); // motor 3
+	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, motor_min_pulse_ticks); // motor 4
 	
 	//quad_rgb_led_set_color(GREEN);
 }

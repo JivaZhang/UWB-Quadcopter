@@ -11,8 +11,8 @@
 // us == microseconds
 // ms == milliseconds
 // Hz == Hertz (Cycles per second)
-#define MIN_PULSE_WIDTH_us	1200	// 0.7 ms ()
-#define MAX_PULSE_WIDTH_us	1800	// 2.0 ms (2000)
+#define MIN_PULSE_WIDTH_us	1100	// 0.7 ms ()
+#define MAX_PULSE_WIDTH_us	1900	// 2.0 ms (2000)
 #define PULSE_TIME_RES_Hz	1000000	// 1000000 Hz = 1 us / cycle
 
 #define MIN_MOTOR_VALUE		0

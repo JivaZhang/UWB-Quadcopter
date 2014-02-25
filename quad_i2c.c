@@ -1,5 +1,7 @@
 
 
+#include "quad_i2c.h"
+
 void quad_i2c_init() {
 	// We will be using I2C pins:
 	//		PE4 -- I2C SCL
@@ -10,8 +12,8 @@ void quad_i2c_init() {
 			
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);// Enable the port (if it 
     											// hasn't already been done).
-	GPIOPinConfigure(GPIO_PE4_ISC2SCL);
-	GPIOPinConfigure(GPIO_PE5_ISC2SDA);
+	GPIOPinConfigure(GPIO_PE4_I2C2SCL);
+	GPIOPinConfigure(GPIO_PE5_I2C2SDA);
 	
 	GPIOPinTypeI2C(GPIO_PORTE_BASE, GPIO_PIN_4 | GPIO_PIN_5);
 	

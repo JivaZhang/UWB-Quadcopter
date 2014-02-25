@@ -2,6 +2,7 @@
 
 #include "quad_common.h"
 #include "quad_pwm.h"
+#include "quad_i2c.h"
 #include "quad_buttons.h"
 #include "quad_motor.h"
 #include "quad_9_axis.h"
@@ -53,9 +54,15 @@ void setup() {
 	// We need to set the clock before anything else!
 	SysCtlClockSet(SYSCTL_SYSDIV_5|SYSCTL_USE_PLL|SYSCTL_OSC_MAIN|SYSCTL_XTAL_16MHZ);
 	quad_pwm_init();
+	quad_i2c_init();
+	
+	// Since we use the RGB Led for debugging, it should be initialized before
+	// everything else.
+	quad_rgb_led_init();
+	
 	quad_motors_init();
 	quad_buttons_init();
-	quad_rgb_led_init();
+	quad_9_axis_init();
 	
 }
 
