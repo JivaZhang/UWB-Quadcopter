@@ -6,11 +6,11 @@
 // starts a default PWM signal.
 void quad_motors_init() {
 
-	motor_min_pulse_ticks = (pwm1_clock_freq_hz * MIN_PULSE_WIDTH_us) / 
-							(PULSE_TIME_RES_Hz);
+	motor_min_pulse_ticks = (1000 * MIN_PULSE_WIDTH_us) / 
+							(pwm1_tick_len_ns) + 1;
 				 	  
-	motor_max_pulse_ticks = (pwm1_clock_freq_hz * MAX_PULSE_WIDTH_us) / 
-							(PULSE_TIME_RES_Hz);
+	motor_max_pulse_ticks = (1000 * MAX_PULSE_WIDTH_us) / 
+							(pwm1_tick_len_ns) - 1;
 	
 	
 	// Set the initial pulse widths to be the minimum pulse width.
