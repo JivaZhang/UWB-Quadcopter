@@ -6,6 +6,7 @@
 
 void quad_rgb_led_init() {
 	rgb_period_num_ticks = pwm1_period_num_ticks;
+	quad_rgb_led_set_color(MAGENTA);
 }
 
 

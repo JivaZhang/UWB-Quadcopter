@@ -15,10 +15,10 @@ void quad_pwm_init() {
 	// Set the clock for the PWM and global variables
 	// TODO: Figure out why setting the PWM clock too high (e.g. either due to
 	//       the system clock, or by using too low of SYSCTL_PWMDIV value.)
-	SysCtlPWMClockSet(SYSCTL_PWMDIV_32);
+	SysCtlPWMClockSet(SYSCTL_PWMDIV_8);
 	
 	
-	pwm1_clock_freq_hz = SysCtlClockGet() / 32;
+	pwm1_clock_freq_hz = SysCtlClockGet() / 8;
 	pwm1_period_len_us = 1000000 / PWM1_PERIOD_Hz;
 	pwm1_tick_len_ns = 1000000000 / pwm1_clock_freq_hz;
 	pwm1_period_num_ticks = (pwm1_clock_freq_hz * PWM1_PERIOD_Hz);

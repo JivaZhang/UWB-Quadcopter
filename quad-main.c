@@ -3,6 +3,7 @@
 #include "quad_common.h"
 #include "quad_pwm.h"
 #include "quad_i2c.h"
+#include "quad_uart.h"
 #include "quad_buttons.h"
 #include "quad_motor.h"
 #include "quad_9_axis.h"
@@ -59,6 +60,9 @@ void setup() {
 	// Since we use the RGB Led for debugging, it should be initialized before
 	// everything else.
 	quad_rgb_led_init();
+	quad_rgb_led_set_color(BLUE);
+	quad_uart_init();
+	quad_rgb_led_set_color(RED);
 	
 	quad_motors_init();
 	quad_buttons_init();

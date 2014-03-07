@@ -64,6 +64,7 @@ FILES      = startup_gcc.c  \
 			 quad_rgb_led.c \
 			 quad_pwm.c     \
 			 quad_i2c.c     \
+			 quad_uart.c    \
              quad-main.c
 
 # Every listing in FILES above should have a corresponding '.o' entry here.  
@@ -75,6 +76,7 @@ OBJS       = startup_gcc.o  \
 			 quad_rgb_led.o \
 			 quad_pwm.o     \
 			 quad_i2c.o     \
+			 quad_uart.o    \
              quad-main.o
 
 # NAME is the name of the project which is assumed to be the basename of the 
