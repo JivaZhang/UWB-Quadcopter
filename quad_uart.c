@@ -8,7 +8,12 @@
 
 void quad_uart_init() {
 	
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART1);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART2);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART3);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART4);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART6);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
@@ -16,6 +21,8 @@ void quad_uart_init() {
 
     GPIOPinConfigure(GPIO_PA0_U0RX); // USB Serial Receive Line
     GPIOPinConfigure(GPIO_PA1_U0TX); // USB Serial Transmit Line
+
+
 
     GPIOPinConfigure(GPIO_PB0_U1RX); // Universal Sonar Receive Linx
     GPIOPinConfigure(GPIO_PB1_U1TX); // Transmit Line Sonar 1
@@ -33,9 +40,11 @@ void quad_uart_init() {
     GPIOPinTypeUART(GPIO_PORTD_BASE, GPIO_PIN_5 | GPIO_PIN_7);
 
 
+
     // Set the UART clock to have a baud rate of 115200
     UARTConfigSetExpClk(UART0_BASE, SysCtlClockGet(), 115200,
         (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
+
 
     UARTConfigSetExpClk(UART1_BASE, SysCtlClockGet(), 115200,
         (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));

@@ -7,6 +7,7 @@
 #include "quad_common.h"
 #include "driverlib/uart.h"
 #include "inc/hw_uart.h"
+#include "quad_rgb_led.h"
 
 void quad_uart_init();
 

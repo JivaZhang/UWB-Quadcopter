@@ -53,7 +53,7 @@ struct PWMSettings {
 
 void setup() {
 	// We need to set the clock before anything else!
-	SysCtlClockSet(SYSCTL_SYSDIV_5|SYSCTL_USE_PLL|SYSCTL_OSC_MAIN|SYSCTL_XTAL_16MHZ);
+	SysCtlClockSet(SYSCTL_SYSDIV_2_5|SYSCTL_USE_PLL|SYSCTL_OSC_MAIN|SYSCTL_XTAL_16MHZ);
 	quad_pwm_init();
 	quad_i2c_init();
 	
@@ -62,7 +62,6 @@ void setup() {
 	quad_rgb_led_init();
 	quad_rgb_led_set_color(BLUE);
 	quad_uart_init();
-	quad_rgb_led_set_color(RED);
 	
 	quad_motors_init();
 	quad_buttons_init();
