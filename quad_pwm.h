@@ -31,6 +31,7 @@ volatile uint32_t pwm1_period_num_ticks;
 volatile uint32_t pwm1_period_len_us;
 volatile uint32_t pwm1_tick_len_ns;
 volatile uint32_t pwm1_clock_freq_hz;
+volatile uint32_t pwm1_period_hz;
 
 
 

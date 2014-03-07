@@ -15,44 +15,48 @@ void quad_pwm_init() {
 	// Set the clock for the PWM and global variables
 	// TODO: Figure out why setting the PWM clock too high (e.g. either due to
 	//       the system clock, or by using too low of SYSCTL_PWMDIV value.)
+	pwm1_period_hz = PWM1_PERIOD_Hz;
 	uint32_t sys_clock_freq = SysCtlClockGet();
 	uint32_t max_counter = 65536;
 	float min_div_value = (float)sys_clock_freq / 
-						  (float)PWM1_PERIOD_Hz / 
+						  (float)pwm1_period_hz / 
 						  (float)max_counter;
 	
 
-	if (min_div_value < 1) {
+	if (min_div_value <= 1) {
 		SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
 		pwm1_clock_freq_hz = SysCtlClockGet() / 1;
-	} else if (min_div_value < 2) {
+	} else if (min_div_value <= 2) {
 		SysCtlPWMClockSet(SYSCTL_PWMDIV_2);
 		pwm1_clock_freq_hz = SysCtlClockGet() / 2;
-	} else if (min_div_value < 4) {
+	} else if (min_div_value <= 4) {
 		SysCtlPWMClockSet(SYSCTL_PWMDIV_4);
 		pwm1_clock_freq_hz = SysCtlClockGet() / 4;
-	} else if (min_div_value < 8) {
+	} else if (min_div_value <= 8) {
 		SysCtlPWMClockSet(SYSCTL_PWMDIV_8);
 		pwm1_clock_freq_hz = SysCtlClockGet() / 8;
-	} else if (min_div_value < 16) {
+	} else if (min_div_value <= 16) {
 		SysCtlPWMClockSet(SYSCTL_PWMDIV_16);
 		pwm1_clock_freq_hz = SysCtlClockGet() / 16;
-	} else if (min_div_value < 32) {
+	} else if (min_div_value <= 32) {
 		SysCtlPWMClockSet(SYSCTL_PWMDIV_32);
 		pwm1_clock_freq_hz = SysCtlClockGet() / 32;
-	} else if (min_div_value < 64) {
+	} else if (min_div_value <= 64) {
 		SysCtlPWMClockSet(SYSCTL_PWMDIV_64);
 		pwm1_clock_freq_hz = SysCtlClockGet() / 64;
 	} else {
 		SysCtlPWMClockSet(SYSCTL_PWMDIV_64);
 		pwm1_clock_freq_hz = SysCtlClockGet() / 64;
+
+		// If we have reached this point than the original period was too long.
+		float min_period_hz = (float)sys_clock_freq / (float) max_counter / 64;
+		pwm1_period_hz = (uint32_t)min_period_hz + 1;
 	}
 	
 	
-	pwm1_clock_freq_hz = SysCtlClockGet() / 16;
-	pwm1_period_len_us = 1000000 / PWM1_PERIOD_Hz;
+	pwm1_period_len_us = 1000000 / pwm1_period_hz;
 	pwm1_tick_len_ns = 1000000000 / pwm1_clock_freq_hz;
-	pwm1_period_num_ticks = (pwm1_clock_freq_hz / PWM1_PERIOD_Hz);
+	pwm1_period_num_ticks = (pwm1_clock_freq_hz / pwm1_period_hz);
 	
 	
 	
