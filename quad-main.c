@@ -8,6 +8,7 @@
 #include "quad_motor.h"
 #include "quad_9_axis.h"
 #include "quad_rgb_led.h"
+#include "quad_ranger.h"
 
 // Motor Driver~
 	// set_max_duty()
@@ -66,6 +67,8 @@ void setup() {
 	quad_motors_init();
 	quad_buttons_init();
 	quad_9_axis_init();
+
+	quad_ranger_init();
 	
 }
 
