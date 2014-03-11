@@ -19,6 +19,11 @@
 // Slave Address
 #define SLAVE_ADDR_9_AXIS	0x68
 
+#define MAX_SHORT	65536
+#define GRAVITY_1	16384
+#define GYRO_SCALE	0.01
+#define TIMESTEP	2
+
 // Slave Registers:
 // Gyroscope:
 #define GYRO_CONFIG		0x1B
@@ -87,7 +92,17 @@ typedef struct NineAxisFloatReadings {
 	float magneto_x;
 	float magneto_y;
 	float magneto_z;
+	float accel_picth;
+	float accel_yaw;
+	float accel_roll;
+	float gyro_picth;
+	float gyro_yaw;
+	float gyro_roll;
 } NineAxisFloat;
+
+
+NineAxisFloat naf_cur;
+NineAxisFloat naf_prev;
 
 // Kalman Filter Structs
 	// Previous
@@ -105,7 +120,7 @@ void quad_9_axis_init();
 void quad_9_axis_read_raw_data();
 void quad_9_axis_get_float_datat();
 void quad_9_axis_get_uint32_data();
-void quad_9_axis_get_euler_angles();
+void quad_9_axis_get_euler_angles(NineAxisFloat *naf_cur, NineAxisFloat *naf_prev, float *theta, float *phi, float *psi);
 
 void quad_9_axis_kalman_filter();
 void quad_9_axis_calc_compensation();
