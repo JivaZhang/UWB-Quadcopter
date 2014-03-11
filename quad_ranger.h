@@ -7,6 +7,8 @@
 
 int timerValue,distance;
 void quad_ranger_init();
-
+void pinIntHandler(void);
+void Timer0IntHandler(void);
+void ResetListener(void);
 
 #endif
