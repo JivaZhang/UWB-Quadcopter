@@ -15,14 +15,14 @@
 #define ACCEL_MAX_VAL	 4		
 #define GYRO_MIN_VAL	-500	// (degrees / sec)
 #define GYRO_MAX_VAL	 500	
+#define GYRO_RESOLUTION	 250	// (degrees / sec)
 
 // Slave Address
 #define SLAVE_ADDR_9_AXIS	0x68
 
 #define MAX_SHORT	65536
 #define GRAVITY_1	16384
-#define GYRO_SCALE	0.01
-#define TIMESTEP	1
+#define GYRO_SCALE	((float)GYRO_RESOLUTION / (float)MAX_SHORT)
 
 // Slave Registers:
 // General:
@@ -90,7 +90,8 @@ typedef struct NineAxisFloatReadings {
 	float gyro_picth;
 	float gyro_yaw;
 	float gyro_roll;
-	uint32_t time_millis;
+	uint32_t seconds;
+	uint32_t micros;
 } NineAxisFloat;
 
 

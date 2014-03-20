@@ -153,9 +153,11 @@ void quad_9_axis_get_euler_angles(NineAxisFloat *naf_cur, NineAxisFloat *naf_pre
 	float accely = naf_cur->accle_y; //
 	float accelz = naf_cur->accle_z; //
 
-	//float temp_yaw = arctanf();
-	float accel_pitch = arctanf(accelz / accely);
-	float accel_roll = arctanf(accelz / accelx);
+	float time_step = naf_prev
+
+	//float temp_yaw = atan2();
+	float accel_pitch = atan2(accelz, accely);
+	float accel_roll = atan2(sqrt(accely*accely + accelz*accelz), accelx);
 
 	float gyro_pitch_prev = naf_prev->gyro_picth;
 	float gyro_roll_prev = naf_prev->gyro_roll;
