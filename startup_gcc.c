@@ -58,8 +58,7 @@ static void IntDefaultHandler(void);
 //*****************************************************************************
 extern int main(void);
 extern void pinIntHandler(void);
-extern void Timer0IntHandler(void);
-extern void ResetListener(void);
+extern void quad_system_time_interrupt(void);
 
 //*****************************************************************************
 //
@@ -113,9 +112,10 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // ADC Sequence 2
     IntDefaultHandler,                      // ADC Sequence 3
     IntDefaultHandler,                      // Watchdog timer
-    Timer0IntHandler,                      // Timer 0 subtimer A
+   // Timer0IntHandler,                      // Timer 0 subtimer A
+    quad_system_time_interrupt,              // Timer 0 subtimer A
     IntDefaultHandler,                      // Timer 0 subtimer B
-    ResetListener,                      // Timer 1 subtimer A
+    IntDefaultHandler,                      // Timer 1 subtimer A
     IntDefaultHandler,                      // Timer 1 subtimer B
     IntDefaultHandler,                      // Timer 2 subtimer A
     IntDefaultHandler,                      // Timer 2 subtimer B

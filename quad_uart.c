@@ -39,14 +39,16 @@ void quad_uart_init() {
     GPIOPinTypeUART(GPIO_PORTC_BASE, GPIO_PIN_5 | GPIO_PIN_7);
     GPIOPinTypeUART(GPIO_PORTD_BASE, GPIO_PIN_5 | GPIO_PIN_7);
 
-
+    UARTEnable(UART0_BASE);
+    UARTEnable(UART1_BASE);
 
     // Set the UART clock to have a baud rate of 115200
     UARTConfigSetExpClk(UART0_BASE, SysCtlClockGet(), 115200,
         (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
 
-
-    UARTConfigSetExpClk(UART1_BASE, SysCtlClockGet(), 115200,
+    // The sonars use a 9600 baud rate for serial data, but we are using 
+    // gpio with interrupts instead.
+    UARTConfigSetExpClk(UART1_BASE, SysCtlClockGet(), 9600,
         (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
 
 

@@ -19,7 +19,6 @@ void quad_motors_init() {
 	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_2, motor_min_pulse_ticks); // motor 3
 	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, motor_min_pulse_ticks); // motor 4
 	
-	//quad_rgb_led_set_color(GREEN);
 }
 
 
@@ -87,6 +86,7 @@ int quad_motors_get_last_val(int motor) {
 			return motor_4.prev_val;
 			break;
 	}
+	return -1;
 }
 
 

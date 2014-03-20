@@ -102,9 +102,6 @@ void quad_buttons_handle_button_events(int button_events) {
 int quad_buttons_get_button_events() {
 
 	int button_events = 0;
-	//	GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, 2);
-	//	GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 4);
-	//	GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, 8);
 	
 	// Right button pressed or released
 	if (GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_0) == 0x00) {
@@ -161,27 +158,6 @@ int quad_buttons_get_button_events() {
 		left_button.pressed = false;
 		right_button.pressed = false;
 	}
-	
-	//if (right_button.released && left_button.released) {
-	//	left_button.pressed = false;
-	//	right_button.pressed = false;
-	//}
-	
-	/*
-	// E-stop button
-	if (ROM_GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_3) == 0x00) {
-		left_button.pressed = true;
-		left_button.released = false;
-	}
-	
-	if (ROM_GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_3) == 0x10) {
-		left_button.released = true;
-	}
-	
-	if (right_button.pressed && right_button.released) {
-		button_events |= E_STOP_BUTTON;
-		left_button.pressed = false;
-	}*/
 	
 	return button_events;
 }

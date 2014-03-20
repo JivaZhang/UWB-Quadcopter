@@ -47,16 +47,10 @@ void quad_rgb_led_set_color_values(uint8_t red, uint8_t green, uint8_t blue) {
 	uint32_t red_ticks = quad_rgb_calculate_num_ticks(red);
 	uint32_t blue_ticks = quad_rgb_calculate_num_ticks(blue);
 	uint32_t green_ticks = quad_rgb_calculate_num_ticks(green);
-	//uint32_t red_ticks = (pwm1_period_num_ticks * red) / MAX_RGB_VALUE;
-	//uint32_t blue_ticks = (pwm1_period_num_ticks * blue) / MAX_RGB_VALUE;
-	//uint32_t green_ticks = (pwm1_period_num_ticks * red) / MAX_RGB_VALUE;
 	
 	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_5, red_ticks);
 	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_6, blue_ticks);
 	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_7, green_ticks);
-	//PWMPulseWidthSet(PWM1_BASE, PWM_OUT_5, pwm1_period_num_ticks);
-	//PWMPulseWidthSet(PWM1_BASE, PWM_OUT_6, 0);
-	//PWMPulseWidthSet(PWM1_BASE, PWM_OUT_7, 0);
 }
 
 

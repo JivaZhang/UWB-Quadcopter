@@ -15,37 +15,12 @@ void quad_i2c_init() {
 	GPIOPinConfigure(GPIO_PE4_I2C2SCL);
 	GPIOPinConfigure(GPIO_PE5_I2C2SDA);
 	
-	GPIOPinTypeI2C(GPIO_PORTE_BASE, GPIO_PIN_4 | GPIO_PIN_5);
+	GPIOPinTypeI2CSCL(GPIO_PORTE_BASE, GPIO_PIN_4);
+	GPIOPinTypeI2C(GPIO_PORTE_BASE, GPIO_PIN_5);
 	
 	I2CMasterInitExpClk(I2C2_BASE, SysCtlClockGet(), false); // set to true to
 															 // enable 400kbps
 															 // transmissions
 	
-	// If we want this device to act as a slave, we would need to run the
-	// following commands.  This could be useful if we want more than one board
-	// communicating together.  Change 'x' to be the I2C module number in use.
-	// I2CSlaveEnable(I2Cx_BASE);
-	// I2CSlaveInit(I2Cx_BASE, SLAVE_ADDRESS)
-	
-	
-	
-	// To write to the I2C data line:
-	// -------------------------------------------------------------------------
-	// I2CMasterDataPut(I2C2_BASE, data); // send data
-	// I2CMasterControl(I2C2_BASE, I2C_MASTER_CMD_SINGLE_SEND); // send data
-	// I2CSlaveStatus(I2C2_BASE); // check if slave acknowledged data trans.
-	
-	
-	// To read from the I2C data line:
-	// -------------------------------------------------------------------------
-	// I2CSlaveDataGet(I2C2_BASE);
-	
-	
-	// To set the slave address:
-	// -------------------------------------------------------------------------
-	// I2CMasterSlaveAddrSet(I2C2_BASE, SLAVE_ADDRESS, true);
-	
-	// To do a dummy read (to avoid getting stale data):
-	// -------------------------------------------------------------------------
-	// I2CMasterControl(I2C2_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
+	I2CMasterEnable(I2C2_BASE);
 }

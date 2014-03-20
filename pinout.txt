@@ -1,0 +1,49 @@
+===============================================================================
+Pinout
+===============================================================================
+
+
+PE4 --  I2C SCL
+PE5 --  I2C SDA
+PA0 --  USB Serial UART0 Rx
+PA1 --  USB Serial UART0 Tx
+PD0 --  Motor 1: Port D Pin 0 (PD0)
+PD1 --  Motor 2: Port D Pin 1 (PD1)
+PA6 --  Motor 3: Port A Pin 6 (PA6)
+PA7 --  Motor 4: Port A Pin 7 (PA7)
+PF1 --  Red LED: Port F Pin 1 (PF1)
+PF2 --  Blu LED: Port F Pin 2 (PF2)
+PF3 --  Grn LED: Port F Pin 3 (PF3)
+PB1 --  Sonar 1   UART Tx
+PD7 --  Sonar 2   UART Tx
+PC7 --  Sonar 3   UART Tx
+PC5 --  Sonar 4   UART Tx
+PD5 --  Sonar 5   UART Tx
+PB0 --  Sonar 1-5 UART Rx
+
+Battery Pwr / Grnd ---> Voltage Regulator ---> VBUS / Gnd
+
+
+pc5 / pf1
+pc4 / pf0
+
+pc4 / pb0  UART1 Rx
+pc5 / pb1  UART1 Tx
+
+pd6	-- UART2 Rx
+pd7	-- UART2 Tx
+
+pc6	-- UART3 Rx
+pc7	-- UART3 Tx
+
+pc4 -- UART4 Rx
+pc5	-- UART4 Tx
+
+pe4	-- UART5 Rx
+pe5	-- UART5 Tx
+
+pd4	-- UART6 Rx
+pd5	-- UART6 Tx
+
+pe0	-- UART7 Rx
+pe1	-- UART7 Tx

@@ -9,47 +9,9 @@
 #include "quad_9_axis.h"
 #include "quad_rgb_led.h"
 #include "quad_ranger.h"
+#include "quad_system_time.h"
+#include "quad_serial.h"
 
-// Motor Driver~
-	// set_max_duty()
-	// set_min_duty()
-	// write value (uint16_t value, unsigned long pin)
-
-// 9Axis
-	// Read values
-	// calibrate
-	
-// How do we abstract away the pins? Massive switch statement? Clever #defines?
-
-// Potential Interrupts?
-	// E-stop
-	// Calibrate orientation button
-	// Calibrate motors button
-	
-// How do we calibrate the 9-axis (either the booster pack or the Arduino)?
-
-// How do we calibrate the motors?  Buttons?  Timing (hard coded)?  Other remote?
-
-
-struct NineAxisReading {
-	float gyro_x;
-	float gyro_y;
-	float gyro_z;
-	float accl_x;
-	float accl_y;
-	float accl_z;
-	float magn_x;
-	float magn_y;
-	float magn_z;
-};
-
-struct NineAxisReading orientation_history[10];
-
-struct PWMSettings {
-	int period_usec;
-	int max_duty_usec;
-	int min_duty_usec;
-};
 
 
 void setup() {
@@ -61,44 +23,99 @@ void setup() {
 	// Since we use the RGB Led for debugging, it should be initialized before
 	// everything else.
 	quad_rgb_led_init();
-	quad_rgb_led_set_color(BLUE);
 	quad_uart_init();
+	quad_rgb_led_set_color(BLUE);
 	
 	quad_motors_init();
+	quad_rgb_led_set_color(YELLOW);
 	quad_buttons_init();
+	quad_rgb_led_set_color(RED);
+	quad_uart_init();
+	quad_rgb_led_set_color(MAGENTA);
 	quad_9_axis_init();
+	quad_rgb_led_set_color(CYAN);
+	quad_system_time_init();
+	quad_rgb_led_set_color(WHITE);
 
 	quad_ranger_init();
 	
 }
 
-void debugSetup(){ // uses the uart0 on gpio pins A0, and A1
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 
-    GPIOPinConfigure(GPIO_PA0_U0RX);
-    GPIOPinConfigure(GPIO_PA1_U0TX);
-    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-
-    UARTConfigSetExpClk(UART0_BASE, SysCtlClockGet(), 115200,
-        (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
-}
-
-void loop() {
-	int button_events = quad_buttons_get_button_events();
-	quad_buttons_handle_button_events(button_events);
-}
 
 
 int main() {
 	setup();
-	//debugSetup(); // the debug setup
 	quad_rgb_led_set_color(GREEN); // Green light indicates that we have
 								   // successfully finished initializing the 
 								   // quadcopter.
+
+
+
+	uint32_t micros_prev = 0;
+	uint32_t micros_cur = 0;
+	uint32_t micros_dif = 0;
+
+	uint32_t seconds_prev = 0;
+	uint32_t seconds_cur = 0;
+	uint32_t seconds_dif = 0;
+
 	while(1) {
-		loop();
-		//if (UARTCharsAvail(UART0_BASE)) UARTCharPut(UART0_BASE, UARTCharGet(UART0_BASE)); // this will check for incoming data and retransmit
+		// Handle button events
+		int button_events = quad_buttons_get_button_events();
+		quad_buttons_handle_button_events(button_events);
+
+		// Get Sonar Data
+		uint32_t dist = quad_ranger_get_last_distance();
+
+		// Get 9-axis Data
+		quad_9_axis_read_raw_data();
+
+		// Get the new time
+		micros_cur = get_system_time_micros();
+		seconds_cur = get_system_time_seconds();
+		seconds_dif = seconds_cur - seconds_prev;
+
+		if (seconds_cur > seconds_prev) {
+			micros_dif = (1000000 * seconds_dif) - (micros_prev - micros_cur);
+		} else {
+			micros_dif = micros_cur - micros_prev;
+		}
+
+		// Print out all of the data
+		// 9-axis
+		serial_put_short((int16_t)nar_cur.gyro_x);
+		UARTCharPut(UART0_BASE, ',');
+		UARTCharPut(UART0_BASE, ' ');
+		serial_put_short((int16_t)nar_cur.gyro_y);
+		UARTCharPut(UART0_BASE, ',');
+		UARTCharPut(UART0_BASE, ' ');
+		serial_put_short((int16_t)nar_cur.gyro_z);
+		UARTCharPut(UART0_BASE, ',');
+		UARTCharPut(UART0_BASE, ' ');
+		serial_put_short((int16_t)nar_cur.accel_x);
+		UARTCharPut(UART0_BASE, ',');
+		UARTCharPut(UART0_BASE, ' ');
+		serial_put_short((int16_t)nar_cur.accel_y);
+		UARTCharPut(UART0_BASE, ',');
+		UARTCharPut(UART0_BASE, ' ');
+		serial_put_short((int16_t)nar_cur.accel_z);
+		UARTCharPut(UART0_BASE, ',');
+		UARTCharPut(UART0_BASE, ' ');
+		// Distance
+		serial_put_int(dist);
+		UARTCharPut(UART0_BASE, ',');
+		UARTCharPut(UART0_BASE, ' ');
+		// Time
+		serial_put_int(micros_dif);
+		
+		// New Line
+		serial_put_string("\n\r");
+
+
+		// Update the previous time.
+		seconds_prev = seconds_cur;
+		micros_prev = micros_cur;
 	}
 
 }

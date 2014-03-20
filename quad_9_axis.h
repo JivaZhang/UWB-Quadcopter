@@ -22,9 +22,13 @@
 #define MAX_SHORT	65536
 #define GRAVITY_1	16384
 #define GYRO_SCALE	0.01
-#define TIMESTEP	2
+#define TIMESTEP	1
 
 // Slave Registers:
+// General:
+#define WHO_AM_I		0x75
+#define POWER_SETTING	0x6B
+
 // Gyroscope:
 #define GYRO_CONFIG		0x1B
 #define GYRO_XOUT_H		0x43
@@ -59,28 +63,16 @@
 // Some structure to hold the calibration floats....
 
 typedef struct NineAxisRawReadings {
-	int16_t gyro_x;
-	int16_t gyro_y;
-	int16_t gyro_z;
-	int16_t accel_x;
-	int16_t accel_y;
-	int16_t accel_z;
-	int16_t magneto_x;
-	int16_t magneto_y;
-	int16_t magneto_z;
+	uint16_t gyro_x;
+	uint16_t gyro_y;
+	uint16_t gyro_z;
+	uint16_t accel_x;
+	uint16_t accel_y;
+	uint16_t accel_z;
+	uint16_t magneto_x;
+	uint16_t magneto_y;
+	uint16_t magneto_z;
 } NineAxisRaw;
-
-typedef struct NineAxisUI32Readings {
-	uint32_t gyro_x;
-	uint32_t gyro_y;
-	uint32_t gyro_z;
-	uint32_t accel_x;
-	uint32_t accel_y;
-	uint32_t accel_z;
-	uint32_t magneto_x;
-	uint32_t magneto_y;
-	uint32_t magneto_z;
-} NineAxisUI32;
 
 typedef struct NineAxisFloatReadings {
 	float gyro_x;
@@ -98,28 +90,20 @@ typedef struct NineAxisFloatReadings {
 	float gyro_picth;
 	float gyro_yaw;
 	float gyro_roll;
+	uint32_t time_millis;
 } NineAxisFloat;
 
 
-NineAxisFloat naf_cur;
-NineAxisFloat naf_prev;
+//NineAxisFloat naf_cur;
+//NineAxisFloat naf_prev;
 
-// Kalman Filter Structs
-	// Previous
-	// Current
+NineAxisRaw nar_cur;
 
-// Euler Angle Orientation Struct
-	// Roll Angle
-	// Pitch Angle
-	// Yaw Angle
-	// Current
-	// Desired
-	// Compensation
 
 void quad_9_axis_init();
+uint16_t quad_9_axis_read_register(uint8_t reg);
 void quad_9_axis_read_raw_data();
 void quad_9_axis_get_float_datat();
-void quad_9_axis_get_uint32_data();
 void quad_9_axis_get_euler_angles(NineAxisFloat *naf_cur, NineAxisFloat *naf_prev, float *theta, float *phi, float *psi);
 
 void quad_9_axis_kalman_filter();

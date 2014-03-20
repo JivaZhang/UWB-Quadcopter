@@ -57,14 +57,19 @@ DIRS       = driverlib \
              lmicdiusb
 
 # All of the source files for the project should be listed here (not headers)
+
+#			 quad_9_axis.c 
 FILES      = startup_gcc.c  \
 			 quad_motor.c  	\
 			 quad_buttons.c \
-			 quad_9_axis.c  \
 			 quad_rgb_led.c \
 			 quad_pwm.c     \
 			 quad_i2c.c     \
 			 quad_uart.c    \
+			 quad_ranger.c  \
+ 			 quad_9_axis.c  \
+			 quad_system_time.c \
+			 quad_serial.c  \
              quad-main.c
 
 # Every listing in FILES above should have a corresponding '.o' entry here.  
@@ -72,11 +77,14 @@ FILES      = startup_gcc.c  \
 OBJS       = startup_gcc.o  \
 			 quad_motor.o   \
 			 quad_buttons.o \
-			 quad_9_axis.o  \
 			 quad_rgb_led.o \
 			 quad_pwm.o     \
 			 quad_i2c.o     \
 			 quad_uart.o    \
+			 quad_ranger.o  \
+			 quad_9_axis.o  \
+			 quad_system_time.o \
+			 quad_serial.o  \
              quad-main.o
 
 # NAME is the name of the project which is assumed to be the basename of the 
