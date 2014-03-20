@@ -28,6 +28,11 @@ void serial_put_int(int val) {
 		UARTCharPut(UART0_BASE, '-');
 		val = -val;
 	}
+	
+	if (val == 0) {
+		UARTCharPut(UART0_BASE, '0');
+		return;
+	}
 
 	bool leading_zeros_done = false;
 	int i;
@@ -46,6 +51,11 @@ void serial_put_short(short val) {
 	if (val < 0) {
 		UARTCharPut(UART0_BASE, '-');
 		val = -val;
+	}
+
+	if (val == 0) {
+		UARTCharPut(UART0_BASE, '0');
+		return;
 	}
 
 	bool leading_zeros_done = false;
