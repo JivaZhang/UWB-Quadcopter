@@ -8,6 +8,7 @@
 #include "inc/hw_i2c.h"
 #include "driverlib/i2c.h"
 #include "driverlib/uart.h"
+#include "quad_serial.h"
 
 #define MAGNETO_MIN_VAL	-1200	// (micro Teslas)
 #define MAGNETO_MAX_VAL	 1200	
@@ -15,14 +16,14 @@
 #define ACCEL_MAX_VAL	 4		
 #define GYRO_MIN_VAL	-500	// (degrees / sec)
 #define GYRO_MAX_VAL	 500	
-#define GYRO_RESOLUTION	 250	// (degrees / sec)
+#define GYRO_RESOLUTION	 250.0	// (degrees / sec)
 
 // Slave Address
 #define SLAVE_ADDR_9_AXIS	0x68
 
 #define MAX_SHORT	65536
-#define GRAVITY_1	16384
-#define GYRO_SCALE	((float)GYRO_RESOLUTION / (float)MAX_SHORT)
+#define GRAVITY_1	16383.0
+#define GYRO_SCALE	(250.0 / 32767.0)
 
 // Slave Registers:
 // General:
@@ -84,28 +85,24 @@ typedef struct NineAxisFloatReadings {
 	float magneto_x;
 	float magneto_y;
 	float magneto_z;
-	float accel_picth;
-	float accel_yaw;
-	float accel_roll;
-	float gyro_picth;
-	float gyro_yaw;
-	float gyro_roll;
-	uint32_t seconds;
+	float yaw;
+	float roll;
+	float pitch;
+	uint32_t sec;
 	uint32_t micros;
 } NineAxisFloat;
 
 
-//NineAxisFloat naf_cur;
-//NineAxisFloat naf_prev;
-
+NineAxisFloat naf_cur;
+NineAxisFloat naf_prev;
 NineAxisRaw nar_cur;
 
 
 void quad_9_axis_init();
 uint16_t quad_9_axis_read_register(uint8_t reg);
 void quad_9_axis_read_raw_data();
-void quad_9_axis_get_float_datat();
-void quad_9_axis_get_euler_angles(NineAxisFloat *naf_cur, NineAxisFloat *naf_prev, float *theta, float *phi, float *psi);
+void quad_9_axis_get_float_data();
+void quad_9_axis_get_euler_angles(float *yaw, float *pitch, float *roll);
 
 void quad_9_axis_kalman_filter();
 void quad_9_axis_calc_compensation();

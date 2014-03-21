@@ -12,6 +12,7 @@ void quad_serial_init();
 void serial_put_int(int val);
 void serial_put_short(short val);
 void serial_put_int_hex(int val);
+void serial_put_float(float val);
 void serial_put_char_hex(uint8_t val);
 void serial_put_string(const char *string);
 

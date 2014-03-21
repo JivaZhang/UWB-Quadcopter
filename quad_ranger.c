@@ -1,6 +1,5 @@
-#include "quad_common.h"
+
 #include "quad_ranger.h"
-#include "quad_system_time.h"
 
 void quad_ranger_init() {
 
@@ -9,10 +8,10 @@ void quad_ranger_init() {
 
 	GPIOIntTypeSet(GPIO_PORTB_BASE, GPIO_PIN_1, GPIO_BOTH_EDGES); // set interupt to both edges
 
-
 	IntEnable(INT_GPIOB);
 	GPIOIntEnable(GPIO_PORTB_BASE, GPIO_PIN_1);
-
+	quad_rgb_led_set_color(GREEN);
+	
 	IntMasterEnable();
 
 	distance = 0;
@@ -37,15 +36,9 @@ void pinIntHandler(void)
 		seconds_end = get_system_time_seconds();
 
 		uint32_t micros_dif = 0;
-		uint32_t seconds_dif = seconds_end - seconds_start;
+		uint32_t seconds_dif = 0;
 
-		// In case we jump a seconds boundary and our micros_end < micros_start.
-		if (seconds_dif > 0) {
-			micros_dif = (1000000 * seconds_dif) - (micros_start - micros_end);
-		} else {
-			micros_dif = micros_end - micros_start;
-		}
-
+		get_time_elapsed(seconds_start, micros_start, seconds_end, micros_end, &seconds_dif, &micros_dif);
 
 		// Calculate the distance.  The '+ 20' is to handle the case where we
 		// receive an interrupt slightly before an even multiple of 58 us.

@@ -11,7 +11,7 @@ void quad_system_time_init() {
 	// SysCtlClockGet() returns a value that is a multiple of 1000000.
 	uint32_t timer_period = (SysCtlClockGet() / 1000000);
 
-	TimerLoadSet(TIMER0_BASE, TIMER_A, timer_period - 1);
+	TimerLoadSet(TIMER0_BASE, TIMER_A, timer_period);
 
 	IntEnable(INT_TIMER0A);
 	TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
@@ -27,6 +27,17 @@ void quad_system_time_interrupt(void) {
 		time_seconds++;
 		time_micros = 0;
 	}
+}
+
+void get_time_elapsed(uint32_t sec_prev, uint32_t micros_prev, uint32_t sec_cur, uint32_t micros_cur, uint32_t *sec_elapsed, uint32_t *micros_elapsed) {
+
+		(*sec_elapsed) = sec_cur - sec_prev;
+
+		if ((*sec_elapsed) > 0) {
+			(*micros_elapsed) = 1000000 - (micros_prev - micros_cur);
+		} else {
+			(*micros_elapsed) = micros_cur - micros_prev;
+		}
 }
 
 

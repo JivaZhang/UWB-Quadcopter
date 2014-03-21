@@ -15,10 +15,12 @@ void quad_system_time_init();
 
 void quad_system_time_interrupt();
 
+void get_time_elapsed(uint32_t sec_prev, uint32_t micros_prev, uint32_t sec_cur, uint32_t micros_cur, uint32_t *sec_elapsed, uint32_t *micros_elapsed);
 
 uint32_t get_system_time_millis();
 uint32_t get_system_time_micros();
 uint32_t get_system_time_seconds();
+
 
 
 #endif //QUAD_SYSTEM_TIME_H

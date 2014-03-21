@@ -85,7 +85,7 @@ OBJS       = startup_gcc.o  \
 			 quad_9_axis.o  \
 			 quad_system_time.o \
 			 quad_serial.o  \
-             quad-main.o
+             quad-main.o    
 
 # NAME is the name of the project which is assumed to be the basename of the 
 # current directory.  This will be used to name the .bin file after linking.
@@ -117,22 +117,23 @@ LIBS        = driver
 ################################################################################
 
 CC = arm-none-eabi-gcc
-LD = arm-none-eabi-ld
+LD = arm-none-eabi-gcc
+#LD = arm-none-eabi-ld
 OB = arm-none-eabi-objcopy
-
 
 
 ################################################################################
 # Flags (Hope they all work :P)
 ################################################################################
 
-COMPILE_FLAGS = -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=softfp\
+COMPILE_FLAGS = -mthumb  -march=armv7e-m -mfpu=fpv4-sp-d16 -mfloat-abi=hard     \
                 -Os -ffunction-sections -fdata-sections -MD -std=c99 -Wall     \
                 -pedantic -DPART_TM4C123GH6PM -c -I${CURDIR}                   \
-                -DTARGET_IS_BLIZZARD_RA1
+                -DTARGET_IS_BLIZZARD_RA3
                 
-LINKER_FLAGS  = -T project.ld --entry ResetISR --gc-sections -L${LIB_DIRS}     \
-                -l${LIBS}
+LINKER_FLAGS  = -nostartfiles -T project.ld --entry ResetISR -L${LIB_DIRS}     \
+                -l${LIBS} -L/usr/arm-none-eabi/lib/armv7e-m/fpu -lm         
+
 
 OBJCOPY_FLAGS = -O binary
 

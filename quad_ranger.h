@@ -7,6 +7,7 @@
 #include "driverlib/interrupt.h"
 #include "quad_serial.h"
 #include "quad_system_time.h"
+#include "quad_rgb_led.h"
 
 uint32_t micros_start;
 uint32_t seconds_start;

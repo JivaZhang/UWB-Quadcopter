@@ -28,7 +28,7 @@ void serial_put_int(int val) {
 		UARTCharPut(UART0_BASE, '-');
 		val = -val;
 	}
-	
+
 	if (val == 0) {
 		UARTCharPut(UART0_BASE, '0');
 		return;
@@ -99,6 +99,26 @@ void serial_put_int_hex(int val) {
 
 }
 
+
+void serial_put_float(float val) {
+	if (val < 0) {
+		serial_put_string("-");
+		val = -val;
+	}
+
+	int head = ((int)val);
+	serial_put_int(head);
+	serial_put_string(".");	
+	
+
+	int i;
+	for (i = 0; i < 8; i++) {
+		val -= head;
+		val *= 10;
+		head = ((int)val);
+		serial_put_int(head);
+	}
+}
 
 void serial_put_char_hex(uint8_t val) {
 	uint8_t temp;
